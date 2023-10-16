@@ -30,11 +30,6 @@ export async function deleteById (req, res) {
   res.json(deletedUser);
 }
 
-export async function getStats (req, res) {
-  const data = await userService.getStats(req, res);
-  res.json(data);
-}
-
 export async function changePasswordRequest (req, res) {
   const { email } = req.body;
 

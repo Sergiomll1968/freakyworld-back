@@ -4,7 +4,7 @@ import { hashSync } from 'bcrypt';
 import * as usersRepo from './users.repository.js';
 
 const {
-  EMAIL_ADDRESS, EMAIL_PASSWORD, HOST, CHANGE_PASSWORD_ROUTE, JWT_SECRET, JWT_EXPIRES_IN
+  EMAIL_SERVICE, EMAIL_ADDRESS, EMAIL_PASSWORD, EMAIL_HEADER, HOST, CHANGE_PASSWORD_ROUTE, JWT_SECRET, JWT_EXPIRES_IN
 } = process.env;
 
 export async function getAll (req, res) {
@@ -27,11 +27,6 @@ export async function deleteById ({ id }) {
   return deletedUser;
 }
 
-export async function getStats (req, res) {
-  const data = await usersRepo.getStats(req, res);
-  return data;
-}
-
 export async function changePasswordRequest ({ email }) {
   const user = await usersRepo.getByEmail({ email });
   if (!user) {
@@ -43,20 +38,20 @@ export async function changePasswordRequest ({ email }) {
   const tempToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: EMAIL_SERVICE,
     auth: {
       user: EMAIL_ADDRESS,
       pass: EMAIL_PASSWORD
     }
   });
 
-  const htmlLink = `<a href='${HOST}${CHANGE_PASSWORD_ROUTE}${tempToken}' target='_blank'>Pincha aquí</a>`;
+  const htmlLink = `<a href='${HOST}${CHANGE_PASSWORD_ROUTE}${tempToken}' target='_blank'>Haz click aqui para cambiar contraseña</a>`;
 
   const mailOptions = {
-    from: 'Los máquinas de TheBridge <correothebridge01@gmail.com>',
+    from: EMAIL_HEADER,
     to: `${email}`,
     subject: 'Enlace para recuperar su contraseña:',
-    text: `localhost:3001/users/changepassword/${tempToken}`,
+    text: `${HOST}${CHANGE_PASSWORD_ROUTE}${tempToken}`,
     html: htmlLink
   };
 
@@ -69,12 +64,16 @@ export async function changePasswordRequest ({ email }) {
 }
 
 export async function changePassword ({ token }) {
-  jwt.verify(token, JWT_SECRET, async (error, payload) => {
-    if (error) {
-      const myError = { status: 403, message: 'Token error' };
-      throw new Error(JSON.stringify(myError));
-    }
-    return payload.email;
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, JWT_SECRET, (error, payload) => {
+      if (error) {
+        const myError = { status: 403, message: 'Token error' };
+        reject(JSON.stringify(myError));
+      } else {
+        const email = payload.email;
+        resolve(email);
+      }
+    });
   });
 }
 

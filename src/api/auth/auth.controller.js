@@ -1,6 +1,8 @@
 import * as authService from './auth.service.js';
 import * as usersRepository from '../users/users.repository.js';
 
+const { CONFIRM_PAGE } = process.env;
+
 function isValidEmail (mail) {
   const validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
   if (validEmail.test(mail)) {
@@ -82,5 +84,5 @@ export async function login (req, res) {
 export async function confirm (req, res) {
   const { emailtoken } = req.params;
   await authService.confirm({ emailtoken });
-  res.redirect('https://my-bookings.vercel.app/confirm');
+  res.redirect(CONFIRM_PAGE);
 }

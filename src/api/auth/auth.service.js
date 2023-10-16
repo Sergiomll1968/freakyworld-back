@@ -3,6 +3,8 @@ import { hashSync, compareSync } from 'bcrypt';
 import nodemailer from 'nodemailer';
 import * as usersRepository from '../users/users.repository.js';
 
+const { EMAIL_SERVICE, EMAIL_HEADER } = process.env;
+
 function getToken ({ id, isAdmin, username }) {
   const payload = { id, isAdmin, username };
 
@@ -43,7 +45,7 @@ export async function register ({
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: EMAIL_SERVICE,
       auth: {
         user: process.env.EMAIL_ADDRESS,
         pass: process.env.EMAIL_PASSWORD
@@ -52,7 +54,7 @@ export async function register ({
     const url = process.env.HOST + process.env.CONFIRM_ROUTE + emailToken;
 
     await transporter.sendMail({
-      from: '"Freaky World" <maciaslluchsergio@gmail.com>',
+      from: EMAIL_HEADER,
       to: email,
       subject: 'Confirma tu registro.',
       html: `
