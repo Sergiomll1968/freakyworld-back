@@ -2,20 +2,15 @@ import { Schema, model } from 'mongoose';
 
 const cartSchema = new Schema(
   {
-    userId: { type: String, required: true },
+    userId: { type: String, ref: 'User', required: true, unique: true },
     products: [
       {
-        productId: {
-          type: String,
-        },
-        quantity: {
-          type: Number,
-          default: 1,
-        },
-      },
-    ],
+        productId: { type: String, ref: 'Product', required: true },
+        quantity: { type: Number, default: 1 }
+      }
+    ]
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const cartModel = model('Cart', cartSchema);

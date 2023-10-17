@@ -14,6 +14,8 @@ function middleware (req, res, next) {
     '/users/changepassword',
     '/confirm',
     '/products',
+    '/carts',
+    '/orders',
     '/payments'
   ];
 

@@ -1,6 +1,6 @@
 import orderModel from './orders.model.js';
 
-export async function getAll(req, res) {
+export async function getAll (req, res) {
   try {
     const orders = await orderModel.find().lean();
     res.status(200).json(orders);
@@ -9,31 +9,31 @@ export async function getAll(req, res) {
   }
 }
 
-export async function getByUserId({ id }) {
+export async function getByOrderId ({ orderId }) {
   const order = await orderModel
-    .find({ userId: id })
+    .find({ _id: orderId })
     .lean();
   return order;
 }
 
-export async function patchById({ id, newProps }) {
+export async function patchById ({ id, newProps }) {
   const query = { _id: id };
   const updatedOrder = await orderModel.findOneAndUpdate(query, newProps, { new: true })
     .lean();
   return updatedOrder;
 }
 
-export async function deleteById({ id }) {
+export async function deleteById ({ id }) {
   const deletedOrder = await orderModel.findByIdAndDelete(id);
   return deletedOrder;
 }
 
-export async function create({ orderData }) {
-  const newOrder = await orderModel.create({ orderData });
+export async function create ({ orderData }) {
+  const newOrder = await orderModel.create(orderData);
   return newOrder;
 }
 
-export async function getIncome(req, res) {
+export async function getIncome (req, res) {
   const date = new Date();
   const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
   const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
@@ -44,15 +44,15 @@ export async function getIncome(req, res) {
       {
         $project: {
           month: { $month: '$createdAt' },
-          sales: '$amount',
-        },
+          sales: '$amount'
+        }
       },
       {
         $group: {
           _id: '$month',
-          total: { $sum: '$sales' },
-        },
-      },
+          total: { $sum: '$sales' }
+        }
+      }
     ]);
     res.status(200).json(income);
   } catch (err) {
