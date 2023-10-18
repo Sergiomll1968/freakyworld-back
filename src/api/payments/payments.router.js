@@ -10,7 +10,7 @@ router.post('/stripe', (req, res) => {
     {
       source: req.body.tokenId,
       amount: req.body.amount,
-      currency: 'eur',
+      currency: 'eur'
     },
     (stripeErr, stripeRes) => {
       if (stripeErr) {
@@ -18,7 +18,7 @@ router.post('/stripe', (req, res) => {
       } else {
         res.status(200).json(stripeRes);
       }
-    },
+    }
   );
 });
 

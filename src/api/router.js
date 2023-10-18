@@ -6,7 +6,7 @@ import productsRouter from './products/products.router.js';
 import usersRouter from './users/users.router.js';
 
 import * as authController from './auth/auth.controller.js';
-// import paymentsRouter from './payments/payments.router.js';
+import paymentsRouter from './payments/payments.router.js';
 
 const router = Router();
 
@@ -19,6 +19,6 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.get('/confirm/:emailtoken', authController.confirm);
 
-// router.use('/payments', paymentsRouter);
+router.use('/payments', paymentsRouter);
 
 export default router;
