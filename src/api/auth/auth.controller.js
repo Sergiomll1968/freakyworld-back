@@ -1,5 +1,6 @@
 import * as authService from './auth.service.js';
 import * as usersRepository from '../users/users.repository.js';
+import { validateData } from './auth.validation.js';
 
 const { CONFIRM_PAGE } = process.env;
 
@@ -28,6 +29,12 @@ export async function register (req, res) {
     const resobj = { ok: false, message: 'Invalid email' };
     res.json(resobj);
     return;
+  }
+
+  const result = validateData(req.body)
+
+  if (!result.success) {
+    return res.status(400).json({ error: JSON.parse(result.error.message) })
   }
 
   const userEmailExists = await usersRepository.getByEmail({ email });

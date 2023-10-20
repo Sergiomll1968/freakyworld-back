@@ -1,5 +1,6 @@
 import { hashSync } from 'bcrypt';
 import * as userService from './users.service.js';
+import { validatePartialData } from './users.validation.js';
 
 export async function getAll (req, res) {
   const users = await userService.getAll(req, res);
@@ -15,6 +16,12 @@ export async function getById (req, res) {
 export async function patchById (req, res) {
   const { id } = req.params;
   const newProps = req.body;
+
+  const result = validatePartialData(req.body)
+
+  if (!result.success) {
+    return res.status(400).json({ error: JSON.parse(result.error.message) })
+  }
 
   if (newProps.password) {
     newProps.password = hashSync(newProps.password, 10);
@@ -32,6 +39,12 @@ export async function deleteById (req, res) {
 
 export async function changePasswordRequest (req, res) {
   const { email } = req.body;
+
+  const result = validatePartialData(req.body)
+
+  if (!result.success) {
+    return res.status(400).json({ error: JSON.parse(result.error.message) })
+  }
 
   if (!email) {
     res.status(400);
@@ -79,6 +92,10 @@ export async function changePassword (req, res) {
 
   let updatedUser;
   try {
+    const result = validatePartialData({ email, password });
+    if (!result.success) {
+      return res.status(400).json({ error: JSON.parse(result.error.message) });
+    }
     updatedUser = await userService.updateByEmail({ email, password });
   } catch (error) {
     const myError = JSON.parse(error.message);
