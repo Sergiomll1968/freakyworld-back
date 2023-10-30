@@ -14,15 +14,10 @@ const userSchema = zod.object({
   confirmed: zod.boolean()
 })
 
-function validateData (input) {
+export function validateData (input) {
   return userSchema.safeParse(input)
 }
 
-function validatePartialData (input) {
+export function validatePartialData (input) {
   return userSchema.partial().safeParse(input)
-}
-
-module.exports = {
-  validateData,
-  validatePartialData
 }

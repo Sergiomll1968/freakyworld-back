@@ -17,15 +17,10 @@ const cartSchema = zod.object({
   )
 })
 
-function validateData (input) {
+export function validateData (input) {
   return cartSchema.safeParse(input)
 }
 
-function validatePartialData (input) {
+export function validatePartialData (input) {
   return cartSchema.partial().safeParse(input)
-}
-
-module.exports = {
-  validateData,
-  validatePartialData
 }

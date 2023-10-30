@@ -19,15 +19,10 @@ const productSchema = zod.object({
   stock: zod.number().int().positive().default(0)
 })
 
-function validateData (input) {
+export function validateData (input) {
   return productSchema.safeParse(input)
 }
 
-function validatePartialData (input) {
+export function validatePartialData (input) {
   return productSchema.partial().safeParse(input)
-}
-
-module.exports = {
-  validateData,
-  validatePartialData
 }

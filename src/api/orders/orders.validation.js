@@ -39,15 +39,10 @@ const orderSchema = zod.object({
   status: zod.enum(['pending', 'in process', 'finished', 'cancelled', 'failed']).default('pending')
 })
 
-function validateData (input) {
+export function validateData (input) {
   return orderSchema.safeParse(input)
 }
 
-function validatePartialData (input) {
+export function validatePartialData (input) {
   return orderSchema.partial().safeParse(input)
-}
-
-module.exports = {
-  validateData,
-  validatePartialData
 }
