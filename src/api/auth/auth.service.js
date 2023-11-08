@@ -66,7 +66,7 @@ export async function register ({
   } catch (error) {
     console.error('error', error);
   }
-  const message = 'Please, we&apos;ve sent you an email to confirm your account';
+  const message = { ok: true, message: 'User created successfully' };
   return message;
 }
 
