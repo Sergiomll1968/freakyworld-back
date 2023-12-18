@@ -1,6 +1,6 @@
 import * as authService from './auth.service.js';
 import * as usersRepository from '../users/users.repository.js';
-import { validateData } from './auth.validation.js';
+import { validatePartialData } from './auth.validation.js';
 
 const { CONFIRM_PAGE } = process.env;
 
@@ -31,7 +31,7 @@ export async function register (req, res) {
     return;
   }
 
-  const result = validateData(req.body)
+  const result = validatePartialData(req.body)
 
   if (!result.success) {
     return res.status(400).json({ error: JSON.parse(result.error.message) })

@@ -8,6 +8,8 @@ const router = Router();
 router.get('/all', usersController.getAll);
 // router.get('/:id', accessControl.verifyTokenAndAdmin, usersController.getById);
 router.get('/:id', usersController.getById);
+// router.get('getUserByToken/:token', accessControl.verifyTokenAndAdmin, usersController.getUserByToken);
+router.get('/getUserByToken/:token', usersController.getUserByToken);
 
 // router.patch('/:id', accessControl.verifyTokenAndAuthorization, usersController.patchById);
 router.patch('/:id', usersController.patchById);

@@ -17,6 +17,25 @@ export async function getById ({ id }) {
   return user;
 }
 
+export async function getUserByToken ({ token }) {
+  const username = jwt.verify(token, JWT_SECRET, (error, payload) => {
+    if (error) {
+      const myError = { status: 403, message: 'Token error' };
+      throw new Error(JSON.stringify(myError));
+    } else {
+      const username = payload.username;
+      return username;
+    }
+  }
+  );
+  if (!username) {
+    const myError = { status: 403, message: 'Token error' };
+    throw new Error(JSON.stringify(myError));
+  }
+  const userByUsername = getByUsername({ username });
+  return userByUsername;
+}
+
 export async function patchById ({ id, newProps }) {
   const updatedUser = await usersRepo.patchById({ id, newProps });
   return updatedUser;

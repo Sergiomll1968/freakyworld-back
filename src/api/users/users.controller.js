@@ -13,6 +13,12 @@ export async function getById (req, res) {
   res.json(userById);
 }
 
+export async function getUserByToken (req, res) {
+  const { token } = req.params;
+  const userByToken = await userService.getUserByToken({ token });
+  res.json(userByToken);
+}
+
 export async function patchById (req, res) {
   const { id } = req.params;
   const newProps = req.body;

@@ -3,13 +3,13 @@ import { hashSync, compareSync } from 'bcrypt';
 import nodemailer from 'nodemailer';
 import * as usersRepository from '../users/users.repository.js';
 
-const { EMAIL_SERVICE, EMAIL_HEADER } = process.env;
+const { EMAIL_SERVICE, EMAIL_HEADER, JWT_SECRET, JWT_EXPIRES_IN } = process.env;
 
 function getToken ({ id, isAdmin, username }) {
   const payload = { id, isAdmin, username };
 
-  const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN
+  const token = jwt.sign(payload, JWT_SECRET, {
+    expiresIn: JWT_EXPIRES_IN
   });
 
   return token;
